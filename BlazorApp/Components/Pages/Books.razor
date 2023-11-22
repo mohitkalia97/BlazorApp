@@ -1,19 +1,21 @@
 ﻿@page "/books"
 @inject IBookService _bookService
+@rendermode InteractiveServer
 
 <PageTitle> Books </PageTitle>
 
-<TelerikGrid Data="@GridData"
-             EditMode="@GridEditMode.Inline"
-             Pageable="true"
-             Resizable="true"
-             OnCreate="@AddHandler"
-             PageSize="15" 
-             Height="500px">
-    <GridToolBarTemplate>
-        <GridCommandButton Command="Add" Icon="@SvgIcon.Plus">Add Book</GridCommandButton>
-    </GridToolBarTemplate>
+<form>
+    <label for="title">Title:</label><br>
+    <input type="text" id="title" @bind="newBook._title"><br>
 
+    <label for="description">Description:</label><br>
+    <input type="text" id="description" @bind="newBook._description"><br><br>
+
+    <input type="submit" value="Add" @onclick="@HandleSubmit">
+</form>
+
+<TelerikGrid Data="@GridData"
+             EditMode="@GridEditMode.Inline">
     <GridColumns>
         <GridColumn Field=@nameof(Models.Book.Id) Title="ID" Editable="false" />
         <GridColumn Field=@nameof(Models.Book._title)
@@ -32,35 +34,22 @@
 
 @code {
     private List<Models.Book> GridData { get; set; }
-
-    async Task AddHandler(GridCommandEventArgs args)
-    {
-        //Set default values for new items
-        ((Models.Book)args.Item)._title = "New Item Name";
-
-        //Cancel if needed
-        //args.IsCancelled = true;
-        System.Diagnostics.Debug.WriteLine("test");
-
-
-        Models.Book book = new Models.Book
-        {
-                _title = "New Book",
-                _description = "",
-                _created = DateTime.Now
-        };
-
-        _bookService.addBook(book);
-
-        base.OnInitialized();
-    }
-
+    private Models.Book newBook = new Models.Book();
 
     protected override void OnInitialized()
     {
         GridData = _bookService.getAllBooks();
 
-        base.OnInitialized();
+        //base.OnInitialized();
+    }
+
+    private async Task HandleSubmit()
+    {
+        newBook._created = DateTime.UtcNow;
+        await _bookService.addBook(newBook);
+        GridData = _bookService.getAllBooks();
+        StateHasChanged();
+        // newBook = new Models.Book();
     }
 
 }

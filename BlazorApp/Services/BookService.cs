@@ -13,9 +13,13 @@ namespace BlazorApp.Services
             _bookDbContext = bookDbContext;   
         }
 
-        public void addBook(Book book)
+        public Task addBook(Book book)
         {
             _bookDbContext.Books.Add(book); 
+            _bookDbContext.SaveChanges();
+
+            return Task.CompletedTask;
+
         }
 
         public List<Book> getAllBooks()
