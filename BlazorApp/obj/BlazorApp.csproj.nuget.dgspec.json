@@ -61,6 +61,10 @@
               "target": "Package",
               "version": "[7.0.0-preview.1, )"
             },
+            "Telerik.Core.Export": {
+              "target": "Package",
+              "version": "[2023.3.1114, )"
+            },
             "Telerik.UI.for.Blazor": {
               "target": "Package",
               "version": "[5.0.1, )"
