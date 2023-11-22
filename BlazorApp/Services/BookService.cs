@@ -19,14 +19,26 @@ namespace BlazorApp.Services
             _bookDbContext.SaveChanges();
 
             return Task.CompletedTask;
-
         }
 
         public List<Book> getAllBooks()
         {
             return _bookDbContext.Books.ToList();
         }
- 
 
+        public Task deleteBook(Book book)
+        {
+            _bookDbContext.Remove(book);
+            _bookDbContext.SaveChanges();
+
+            return Task.CompletedTask;
+        }
+
+        public Task updateBook(Book book)
+        {
+            _bookDbContext.Update(book);
+
+            return Task.CompletedTask;
+        }
     }
 }

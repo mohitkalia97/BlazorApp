@@ -4,28 +4,28 @@
 
 <PageTitle> Books </PageTitle>
 
-<form>
-    <label for="title">Title:</label><br>
-    <input type="text" id="title" @bind="newBook._title"><br>
-
-    <label for="description">Description:</label><br>
-    <input type="text" id="description" @bind="newBook._description"><br><br>
-
-    <input type="submit" value="Add" @onclick="@HandleSubmit">
-</form>
-
 <TelerikGrid Data="@GridData"
-             EditMode="@GridEditMode.Inline">
+             EditMode="@GridEditMode.Inline"
+             OnUpdate="@UpdateHandler"
+             OnCreate="@CreateHandler"
+             OnDelete="@DeleteHandler"
+             >
+    <GridToolBarTemplate>
+        <GridCommandButton Command="Add" Icon="@SvgIcon.Plus">Add Book</GridCommandButton>
+    </GridToolBarTemplate>
+
     <GridColumns>
         <GridColumn Field=@nameof(Models.Book.Id) Title="ID" Editable="false" />
         <GridColumn Field=@nameof(Models.Book._title)
                     EditorType="@GridEditorType.TextArea"
                     Title="Name" />
-        <GridColumn Field="@nameof(Models.Book._description)" Editable="false" Title="Description" />
+        <GridColumn Field="@nameof(Models.Book._description)" EditorType="@GridEditorType.TextArea" Title="Description" />
         <GridColumn Field="@nameof(Models.Book._created)" Editable="false" Title="Created On" />
         <GridCommandColumn>
             <GridCommandButton Command="Save" Icon="@SvgIcon.Save" ShowInEdit="true">Update</GridCommandButton>
             <GridCommandButton Command="Edit" Icon="@SvgIcon.Pencil">Edit</GridCommandButton>
+            <GridCommandButton Command="Delete" Icon="@SvgIcon.Trash">Delete</GridCommandButton>
+            <GridCommandButton Command="Cancel" Icon="@SvgIcon.Cancel" ShowInEdit="true">Cancel</GridCommandButton>
         </GridCommandColumn>
     </GridColumns>
     
@@ -43,13 +43,26 @@
         //base.OnInitialized();
     }
 
-    private async Task HandleSubmit()
+
+    private async Task CreateHandler(GridCommandEventArgs args)
     {
-        newBook._created = DateTime.UtcNow;
+        var newBook = (Models.Book)args.Item;
         await _bookService.addBook(newBook);
         GridData = _bookService.getAllBooks();
-        StateHasChanged();
-        // newBook = new Models.Book();
+    }
+
+    private async Task UpdateHandler(GridCommandEventArgs args)
+    {
+        var updatedBook = (Models.Book)args.Item;
+        await _bookService.updateBook(updatedBook);
+        GridData = _bookService.getAllBooks();
+    }
+
+    private async Task DeleteHandler(GridCommandEventArgs args)
+    {
+        var bookToDelete = (Models.Book)args.Item;
+        await _bookService.deleteBook(bookToDelete); 
+        GridData = _bookService.getAllBooks();
     }
 
 }

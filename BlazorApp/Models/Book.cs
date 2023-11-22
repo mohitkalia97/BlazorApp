@@ -17,6 +17,7 @@ namespace BlazorApp.Models
         public Book()
         {
             Id = ObjectId.GenerateNewId();
+            _created = DateTime.UtcNow;
         }
     }
 }
