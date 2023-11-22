@@ -41,9 +41,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "Microsoft.EntityFrameworkCore.Sqlite": {
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[7.0.14, )"
             },
             "MongoDB.Bson": {
               "target": "Package",
@@ -60,6 +60,10 @@
             "MongoDB.EntityFrameworkCore": {
               "target": "Package",
               "version": "[7.0.0-preview.1, )"
+            },
+            "Telerik.UI.for.Blazor": {
+              "target": "Package",
+              "version": "[5.0.1, )"
             }
           },
           "imports": [

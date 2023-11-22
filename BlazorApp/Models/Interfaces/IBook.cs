@@ -1,7 +1,9 @@
-﻿namespace BlazorApp.Models.Interfaces
+﻿using MongoDB.Bson;
+
+namespace BlazorApp.Models.Interfaces
 {
-    public class IBook
+    public interface IBook
     {
-        public Guid _Id { get; set; }
+        ObjectId Id { get; set; }
     }
 }

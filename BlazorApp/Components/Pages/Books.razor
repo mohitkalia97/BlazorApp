@@ -1,0 +1,30 @@
+﻿@page "/books"
+@using Microsoft.EntityFrameworkCore
+@inject IBookService _bookService
+
+<PageTitle> Books </PageTitle>
+
+<TelerikGrid Data="@GridData"
+             Pageable="true"
+             Sortable="true"
+             >
+    <GridColumns>
+        <GridColumn Field="@nameof(Models.Book._title)" Title="Title" />
+        <GridColumn Field="@nameof(Models.Book._description)" Title="Description" DisplayFormat="{0:C2}" />
+        <GridColumn Field="@nameof(Models.Book._description)" Title ="Created On" DisplayFormat="{0:D}" />
+    </GridColumns>
+</TelerikGrid>
+
+@code {
+    private List<Models.Book> GridData { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+
+        GridData = _bookService.getAllBooks();
+
+        base.OnInitializedAsync();
+    }
+
+}
