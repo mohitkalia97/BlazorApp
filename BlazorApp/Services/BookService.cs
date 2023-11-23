@@ -13,17 +13,24 @@ namespace BlazorApp.Services
             _bookDbContext = bookDbContext;   
         }
 
-        public Task addBook(Book book)
+        public async Task<Book> addBook(Book book)
         {
             _bookDbContext.Books.Add(book); 
             _bookDbContext.SaveChanges();
 
-            return Task.CompletedTask;
+            Book dbBook = await getBookById(book.Id.ToString());
+            return dbBook;
         }
 
         public List<Book> getAllBooks()
         {
             return _bookDbContext.Books.ToList();
+        }
+
+        public async Task<Book> getBookById(string id)
+        {
+            Book book = _bookDbContext.Books.FirstOrDefault(b => b.Id.ToString() == id);
+            return book;
         }
 
         public Task deleteBook(Book book)
@@ -34,11 +41,13 @@ namespace BlazorApp.Services
             return Task.CompletedTask;
         }
 
-        public Task updateBook(Book book)
+        public async Task<Book> updateBook(Book book)
         {
             _bookDbContext.Update(book);
+            _bookDbContext.SaveChanges();
 
-            return Task.CompletedTask;
+            Book dbBook = await getBookById(book.Id.ToString());
+            return dbBook;
         }
     }
 }
